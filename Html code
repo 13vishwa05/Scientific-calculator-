@@ -1,0 +1,167 @@
+DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casio fx-991ES Plus Calculator</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .calculator {
+        width: 370px;
+        background-color: #303030;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+    }
+    .display {
+        height: 60px;
+        background-color: #424242;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 10px;
+        box-sizing: border-box;
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #fff;
+        overflow: hidden;
+    }
+    .buttons {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .button {
+        border: none;
+        outline: none;
+        background-color: #616161;
+        color: #fff;
+        font-size: 1.4rem;
+        padding: 15px 0;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .button:hover {
+        background-color: #757575;
+    }
+    .button.double {
+        grid-column: span 2;
+    }
+    .button.triple {
+        grid-column: span 3;
+    }
+    .button.orange {
+        background-color: #f57c00;
+    }
+    .button.red {
+        background-color: #d32f2f;
+    }
+    .on-off-button {
+        background-color: #757575;
+        color: #fff;
+        font-size: 1.2rem;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    .menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: none;
+    }
+    .menu-item {
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .menu-item:hover {
+        background-color: #f2f2f2;
+    }
+</style>
+</head>
+<body>
+
+<div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+        <button class="button red" onclick="clearDisplay()">AC</button>
+        <button class="button orange" onclick="deleteLast()">DEL</button>
+        <button class="button orange" onclick="appendToDisplay('**')">x<sup>y</sup></button>
+        <button class="button orange" onclick="appendToDisplay('sqrt(')">√</button>
+        <button class="button" onclick="appendToDisplay('7')">7</button>
+        <button class="button" onclick="appendToDisplay('8')">8</button>
+        <button class="button" onclick="appendToDisplay('9')">9</button>
+        <button class="button orange" onclick="appendToDisplay('/')">÷</button>
+        <button class="button" onclick="appendToDisplay('4')">4</button>
+        <button class="button" onclick="appendToDisplay('5')">5</button>
+        <button class="button" onclick="appendToDisplay('6')">6</button>
+        <button class="button orange" onclick="appendToDisplay('*')">x</button>
+        <button class="button" onclick="appendToDisplay('1')">1</button>
+        <button class="button" onclick="appendToDisplay('2')">2</button>
+        <button class="button" onclick="appendToDisplay('3')">3</button>
+        <button class="button orange" onclick="appendToDisplay('-')">-</button>
+        <button class="button double" onclick="appendToDisplay('0')">0</button>
+        <button class="button" onclick="appendToDisplay('.')">.</button>
+        <button class="button orange" onclick="calculate()">=</button>
+        <button class="button orange" onclick="appendToDisplay('+')">+</button>
+        <button class="button double" onclick="appendToDisplay('(')">()</button>
+        <button class="button double" onclick="appendToDisplay('Math.PI')">π</button>
+        <button class="button orange" onclick="appendToDisplay('Math.sin(')">sin</button>
+        <button class="button" onclick="appendToDisplay('Math.cos(')">cos</button>
+        <button class="button" onclick="appendToDisplay('Math.tan(')">tan</button>
+        <button class="button" onclick="appendToDisplay('Math.log10(')">log</button>
+        <button class="button" onclick="appendToDisplay('Math.log(')">ln</button>
+        <button class="button" onclick="appendToDisplay('Math.exp(')">e<sup>x</sup></button>
+        <button class="button orange" onclick="storeInMemory()">M+</button>
+        <button class="button orange" onclick="subtractFromMemory()">M-</button>
+        <button class="button orange" onclick="recallMemory()">MR</button>
+        <button class="button orange" onclick="clearMemory()">MC</button>
+    </div>
+    <button class="on-off-button" onclick="toggleMenu()">On</button>
+    <div class="menu" id="menu">
+        <div class="menu-item" onclick="openComplexCalculator()">Complex Calculator</div>
+        <div class="menu-item" onclick="openMatrixCalculator()">Matrix Calculator</div>
+        <!-- Add more menu items for other functionalities -->
+    </div>
+</div>
+
+<script>
+    let memory = 0;
+
+    function appendToDisplay(value) {
+        document.getElementById('display').innerText += value;
+    }
+
+    function clearDisplay() {
+        document.getElementById('display').innerText = '';
+    }
+
+    function deleteLast() {
+        var currentValue = document.getElementById('display').innerText;
+        document.getElementById('display').innerText = currentValue.slice(0, -1);
+    }
+
+    function calculate() {
+        try {
+            var expression = document.getElementById('display').innerText;
+            var result = eval(expression);
+            document.getElementById('display').innerText = result;
+        }
